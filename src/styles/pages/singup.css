@@ -1,0 +1,30 @@
+.container-singup{
+    margin-top: 100px;
+}
+
+.subcontainer-singup{
+    width: 90%;
+    background-color: rgb(252, 252, 252);
+}
+
+.container-singup__imagen, .container-singup__imagen img{
+    display: none;
+}
+
+@media screen and (min-width: 768px) {
+    .container-singup__imagen, .container-singup__imagen img{
+        display: block;
+    }
+
+    .container-singup__imagen img {
+        width: 100%;
+    }
+
+    .container-singup{
+        margin-top: 150px;
+    }
+
+    .subcontainer-singup{
+        width: 70%;
+    }
+}

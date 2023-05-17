@@ -1,0 +1,30 @@
+.container-login{
+    margin-top: 100px;
+}
+
+.subcontainer-login{
+    width: 90%;
+    background-color: rgb(252, 252, 252);
+}
+
+.container-login__imagen, .container-login__imagen img{
+    display: none;
+}
+
+@media screen and (min-width: 768px) {
+    .container-login__imagen, .container-login__imagen img{
+        display: block;
+    }
+
+    .container-login__imagen img {
+        width: 100%;
+    }
+
+    .container-login{
+        margin-top: 150px;
+    }
+
+    .subcontainer-login{
+        width: 70%;
+    }
+}
