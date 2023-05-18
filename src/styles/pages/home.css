@@ -1,0 +1,25 @@
+:root {
+    --box-shadow-dark: rgb(29, 27, 31) 0px 8px 24px;
+    --box-shadow-ligth: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    --color-background-ligth: #ffffff;
+}
+
+.container-home{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.subcontainer-home{
+    width: 90%;
+}
+
+.boxShadowlight{
+    background-color: var(--color-background-ligth);
+    box-shadow: var(--box-shadow-ligth);
+}
+
+.boxShadowdark{
+    background-color: #252945;
+    box-shadow: var(--box-shadow-dark);
+}

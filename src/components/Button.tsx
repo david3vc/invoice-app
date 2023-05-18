@@ -31,8 +31,8 @@ const Button = ({
             style={{width: `${width}`}}
             onClick={onClick}
         >
-            {nombre}
             {children}
+            {nombre}
         </NavLink>
     );
 };

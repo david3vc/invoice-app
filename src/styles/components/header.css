@@ -1,0 +1,36 @@
+.container-header{
+    background-color: var(--color-d);
+}
+
+.container-header__logo{
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.container-header__logo img {
+    width: 50%;
+    height: 50%;
+}
+
+/* .container-header__theme{
+    border-right: 1px solid red;
+} */
+
+.container-header__user{
+    width: 35px;
+    height: 35px;
+    padding: 5px;
+    border-radius: 50%;
+    background-color: rgb(169, 169, 169);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid white;
+}

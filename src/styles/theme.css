@@ -1,4 +1,4 @@
-:root{
+:root {
     --color-a: #7c5dfa;
     --color-b: #9277ff;
     --color-c: #1e2139;
@@ -11,4 +11,14 @@
     --color-j: #ff9797;
     --color-k: #f8f8fb;
     --color-l: #141625;
+}
+
+.dark {
+    background-color: var(--color-c);
+    color: var(--color-k);
+}
+
+.ligth {
+    background-color: var(--color-e);
+    color: var(--color-c);
 }
