@@ -9,6 +9,7 @@ import {
     BOX_SHADOW_LIGHT_THEME,
     LIGHT_THEME,
 } from "../../constants";
+import CardInvoice from "./components/CardInvoice";
 
 const Main = styled("div")`
     font-family: sans-serif;
@@ -77,7 +78,7 @@ const Home = ({ theme }: IHome) => {
     }, [theme]);
 
     return (
-        <div className="container-home">
+        <div className="container-home d-flex flex-wrap">
             <Row className="subcontainer-home d-flex flex-nowrap">
                 <Col className="d-flex flex-wrap">
                     <span className="fw-bold">Invoices</span>
@@ -158,6 +159,9 @@ const Home = ({ theme }: IHome) => {
                         </span>
                     </Button>
                 </Col>
+            </Row>
+            <Row className="container-home__invoices mt-4">
+                <CardInvoice backgroundColor={theme !== LIGHT_THEME ? 'background-color-light' : 'background-color-dark'} colorText={theme !== LIGHT_THEME ? 'text-secondary' : ''} />
             </Row>
         </div>
     );
