@@ -79,9 +79,9 @@ const Home = ({ theme }: IHome) => {
 
     return (
         <div className="container-home d-flex flex-wrap">
-            <Row className="subcontainer-home d-flex flex-nowrap">
-                <Col className="d-flex flex-wrap">
-                    <span className="fw-bold">Invoices</span>
+            <Row className="container-home__filter d-flex flex-nowrap">
+                <Col className="">
+                    <span className="d-flex fw-bold">Invoices</span>
                     <span className="text-secondary fw-bold" style={{fontSize: '12px'}}>7 invoices</span>
                 </Col>
                 <Col className="d-flex align-items-center">
@@ -135,14 +135,12 @@ const Home = ({ theme }: IHome) => {
                             </DropDownListContainer>
                         )}
                     </DropDownContainer>
-                </Col>
-                <Col>
                     <Button
                         nombre="New"
                         colorFondo="colorFondoA"
                         color=""
                         colorHover="colorHoverB"
-                        to="#"
+                        to="/invoice"
                         width="80px"
                     >
                         <span>

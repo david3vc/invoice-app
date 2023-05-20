@@ -7,6 +7,7 @@ interface IButton {
     nombre: string;
     color: string;
     to: string;
+    clase?: string;
     width?: string;
     border?: string;
     children?: ReactNode;
@@ -19,6 +20,7 @@ const Button = ({
     nombre,
     color,
     children,
+    clase,
     width,
     border,
     to,
@@ -27,7 +29,7 @@ const Button = ({
     return (
         <NavLink
             to={to}
-            className={`container-button ${colorFondo} ${colorHover} ${color} ${border}`}
+            className={`container-button ${colorFondo} ${colorHover} ${color} ${border} ${clase}`}
             style={{width: `${width}`}}
             onClick={onClick}
         >

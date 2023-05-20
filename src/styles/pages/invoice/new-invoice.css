@@ -1,0 +1,68 @@
+/* .container-new-invoice{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+} */
+
+.container-new-invoice__bill-from,
+.container-new-invoice__bill-to,
+.container-new-invoice__item-list,
+.container-new-invoice__buttons {
+    width: 90%;
+}
+
+.container-new-invoice__buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-new-invoice__buttons__save{
+    display: flex;
+    column-gap: 5px;
+}
+
+@media screen and (min-width: 576px) {
+    .container-new-invoice__bill-from,
+    .container-new-invoice__bill-to,
+    .container-new-invoice__item-list,
+    .container-new-invoice__buttons {
+        width: 90%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .container-new-invoice__bill-from,
+    .container-new-invoice__bill-to,
+    .container-new-invoice__item-list,
+    .container-new-invoice__buttons {
+        width: 85%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .container-new-invoice__bill-from,
+    .container-new-invoice__bill-to,
+    .container-new-invoice__item-list,
+    .container-new-invoice__buttons {
+        width: 70%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .container-new-invoice__bill-from,
+    .container-new-invoice__bill-to,
+    .container-new-invoice__item-list,
+    .container-new-invoice__buttons {
+        width: 60%;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .container-new-invoice__bill-from,
+    .container-new-invoice__bill-to,
+    .container-new-invoice__item-list,
+    .container-new-invoice__buttons {
+        width: 50%;
+    }
+}

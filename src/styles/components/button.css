@@ -2,7 +2,7 @@
     padding: 10px 20px;
     cursor: pointer;
     text-align: center;
-    /* width: 140px; */
+    width: auto;
     color: aliceblue;
     display: flex;
     align-items: center;
@@ -10,6 +10,7 @@
     column-gap: 8px;
     text-decoration: none;
     border-radius: 25px;
+    font-weight: bold;
 }
 
 .colorFondoA {
@@ -22,6 +23,14 @@
 
 .colorFondoK {
     background-color: var(--color-k);
+}
+
+.colorFondoC {
+    background-color: var(--color-c);
+}
+
+.colorFondoH {
+    background-color: var(--color-h);
 }
 
 .colorHoverB:hover {
@@ -38,8 +47,21 @@
     color: var(--color-a);
 }
 
+.colorHoverD:hover {
+    background-color: var(--color-d);
+    color: var(--color-f);
+}
+
 .colorA {
     color: var(--color-a);
+}
+
+.colorD {
+    color: var(--color-d);
+}
+
+.colorF {
+    color: var(--color-f);
 }
 
 .colorGris {

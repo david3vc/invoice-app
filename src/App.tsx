@@ -5,6 +5,7 @@ import Login from "./pages/auth/Login";
 import Singup from "./pages/auth/Singup";
 import Home from "./pages/home/Home";
 import { DARK_THEME } from "./constants";
+import NewInvoice from "./pages/invoice/NewInvoice";
 
 function App() {
     const [count, setCount] = useState(0);
@@ -15,6 +16,7 @@ function App() {
             <Header setTheme={setTheme} theme={theme} />
             <Routes>
                 <Route path="/" element={<Home theme={theme} />} />
+                <Route path="/invoice" element={<NewInvoice theme={theme} />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/singup" element={<Singup />} />
             </Routes>

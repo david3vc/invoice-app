@@ -10,7 +10,7 @@
     margin-top: 20px;
 }
 
-.subcontainer-home{
+.container-home__filter{
     width: 90%;
 }
 
@@ -32,11 +32,27 @@
     .container-home__invoices{
         width: 90%;
     }
+
+    .container-home__filter{
+        width: 90%;
+    }
+
+    .lista-opciones{
+        right: 150px!important;
+    }
 }
 
 @media screen and (min-width: 768px) {
     .container-home__invoices{
         width: 85%;
+    }
+
+    .container-home__filter{
+        width: 85%;
+    }
+
+    .lista-opciones{
+        right: 200px!important;
     }
 }
 
@@ -44,10 +60,32 @@
     .container-home__invoices{
         width: 70%;
     }
+
+    .container-home__filter{
+        width: 70%;
+    }
+
+    .lista-opciones{
+        right: 290px!important;
+    }
 }
 
 @media screen and (min-width: 1200px) {
     .container-home__invoices{
         width: 60%;
+    }
+
+    .container-home__filter{
+        width: 60%;
+    }
+
+    .lista-opciones{
+        right: 390px!important;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .lista-opciones{
+        right: 490px!important;
     }
 }
