@@ -40,6 +40,7 @@
 
 .colorHoverJ:hover {
     background-color: var(--color-j);
+    color: white;
 }
 
 .colorHoverE:hover {

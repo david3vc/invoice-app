@@ -1,15 +1,17 @@
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CardInvoiceStatus from "./CardInvoiceStatus";
+import { NavLink } from "react-router-dom";
 
 interface ICardInvoice {
     backgroundColor: string;
     colorText: string;
+    to: string;
 }
 
-const CardInvoice = ({ backgroundColor, colorText }: ICardInvoice) => {
+const CardInvoice = ({ backgroundColor, colorText, to }: ICardInvoice) => {
     return (
-        <div className={`container-card-invoice d-sm-flex justify-content-between flex-sm-nowrap flex-md-nowrap shadow-sm p-3 mb-5 bg-body-tertiary rounded ${backgroundColor}`}>
+        <NavLink to={to} style={{textDecoration: 'none'}} className={`container-card-invoice d-sm-flex justify-content-between flex-sm-nowrap flex-md-nowrap shadow-sm p-3 mb-5 bg-body-tertiary rounded ${backgroundColor}`}>
             <Row className="container-card-invoice__user col-sm-5 col-md-5">
                 <Col className="col-sm-4">
                     <span className="text-secondary">#</span>
@@ -28,7 +30,7 @@ const CardInvoice = ({ backgroundColor, colorText }: ICardInvoice) => {
                     <CardInvoiceStatus />
                 </Col>
             </Row>
-        </div>
+        </NavLink>
     );
 };
 

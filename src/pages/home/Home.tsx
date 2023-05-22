@@ -82,12 +82,22 @@ const Home = ({ theme }: IHome) => {
             <Row className="container-home__filter d-flex flex-nowrap">
                 <Col className="">
                     <span className="d-flex fw-bold">Invoices</span>
-                    <span className="text-secondary fw-bold" style={{fontSize: '12px'}}>7 invoices</span>
+                    <span
+                        className="text-secondary fw-bold"
+                        style={{ fontSize: "12px" }}
+                    >
+                        7 invoices
+                    </span>
                 </Col>
                 <Col className="d-flex align-items-center">
                     <DropDownContainer className={theme}>
-                        <DropDownHeader onClick={toggling} className={`d-flex align-items-center ${theme}`}>
-                            <span className="" style={{marginRight: '5px'}}>{selectedOption || "Filter"}</span>
+                        <DropDownHeader
+                            onClick={toggling}
+                            className={`d-flex align-items-center ${theme}`}
+                        >
+                            <span className="" style={{ marginRight: "5px" }}>
+                                {selectedOption || "Filter"}
+                            </span>
                             {isOpen ? (
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +169,15 @@ const Home = ({ theme }: IHome) => {
                 </Col>
             </Row>
             <Row className="container-home__invoices mt-4">
-                <CardInvoice backgroundColor={theme !== LIGHT_THEME ? 'background-color-light' : 'background-color-dark'} colorText={theme !== LIGHT_THEME ? 'text-secondary' : ''} />
+                <CardInvoice
+                    to="invoice/1"
+                    backgroundColor={
+                        theme !== LIGHT_THEME
+                            ? "background-color-light"
+                            : "background-color-dark"
+                    }
+                    colorText={theme !== LIGHT_THEME ? "text-secondary" : ""}
+                />
             </Row>
         </div>
     );
