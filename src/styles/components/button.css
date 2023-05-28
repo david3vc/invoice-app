@@ -29,6 +29,10 @@
     background-color: var(--color-c);
 }
 
+.colorFondoD {
+    background-color: var(--color-d);
+}
+
 .colorFondoH {
     background-color: var(--color-h);
 }

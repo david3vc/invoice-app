@@ -34,3 +34,13 @@
     align-items: center;
     border: 1px solid white;
 }
+
+.container-header__user__logout{
+    position: absolute;
+    top: 70px;
+    right: 15px;
+    z-index: 5;
+    background-color: #1e2139;
+    padding: 25px;
+    border-radius: 10px;
+}

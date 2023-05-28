@@ -4,8 +4,39 @@ import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Button from "../../components/Button";
 import imagenInvoice from "../../assets/undraw_printing_invoices_-5-r4r.svg";
+import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { SingupCreateModel, SingupResponseModel } from "../../types";
+import { authService } from "../../services";
 
 const Singup = () => {
+    const navigate = useNavigate();
+	const formik = useFormik<SingupCreateModel>({
+		initialValues: {
+			email: '',
+			password: '',
+            confirmPassword: '',
+            status: 1,
+		},
+		onSubmit: values => {
+			void singupUser(values);
+		},
+	});
+
+    const singupUser = async (payload: SingupCreateModel): Promise<void> => {
+		try {
+            if(payload.confirmPassword === payload.password){
+                const response = await authService.singup(payload);
+                console.log(response)
+                navigate('/login');
+            }else{
+                console.log('sin coincidencia');
+            }
+		} catch (error) {
+			console.log('Error singup', error);
+		}
+	};
+
     return (
         <div className="container-login d-flex justify-content-center">
             <Row className="subcontainer-login d-flex justify-content-center shadow p-3 mb-5 bg-body-tertiary rounded">
@@ -42,9 +73,9 @@ const Singup = () => {
                                     <Form.Control
                                         type="text"
                                         size="sm"
-                                        name="descripcion"
-                                        // value={formik.values.descripcion ?? ''}
-                                        // onChange={formik.handleChange}
+                                        name="email"
+                                        value={formik.values.email ?? ''}
+                                        onChange={formik.handleChange}
                                     />
                                 </Col>
                                 <Col sm={12}>
@@ -62,11 +93,11 @@ const Singup = () => {
                                         Password
                                     </Form.Label>
                                     <Form.Control
-                                        type="text"
+                                        type="password"
                                         size="sm"
-                                        name="descripcion"
-                                        // value={formik.values.descripcion ?? ''}
-                                        // onChange={formik.handleChange}
+                                        name="password"
+                                        value={formik.values.password ?? ''}
+                                        onChange={formik.handleChange}
                                     />
                                 </Col>
                                 <Col sm={12}>
@@ -84,11 +115,11 @@ const Singup = () => {
                                         Confirm Password
                                     </Form.Label>
                                     <Form.Control
-                                        type="text"
+                                        type="password"
                                         size="sm"
-                                        name="descripcion"
-                                        // value={formik.values.descripcion ?? ''}
-                                        // onChange={formik.handleChange}
+                                        name="confirmPassword"
+                                        value={formik.values.confirmPassword ?? ''}
+                                        onChange={formik.handleChange}
                                     />
                                 </Col>
                             </Stack>
@@ -102,13 +133,14 @@ const Singup = () => {
                                     colorHover="colorHoverB"
                                     to="#"
                                     width="120px"
+                                    onClick={formik.handleSubmit}
                                 />
                             </Col>
                         </Row>
                         <Row>
                             <Col className="d-flex align-items-center">
                                 <Stack direction="horizontal" gap={3}>
-                                    <span>Don't have an account?</span>
+                                    <span>Do you have an account?</span>
                                     <Button
                                         nombre="Login"
                                         colorFondo="colorFondoK"

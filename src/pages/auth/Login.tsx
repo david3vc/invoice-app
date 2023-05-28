@@ -4,8 +4,42 @@ import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import Button from "../../components/Button";
 import imagenInvoice from "../../assets/undraw_printing_invoices_-5-r4r.svg";
+import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { AuthModel, LoginModel } from "../../types";
+import { authService } from "../../services";
+import { LocalStorageSession } from "../../sessions";
+import { toastError, toastSuccess } from "../../utils/ToastHelper";
 
 const Login = () => {
+    const navigate = useNavigate();
+	const formik = useFormik<LoginModel>({
+		initialValues: {
+			email: '',
+			password: '',
+		},
+		onSubmit: values => {
+			void loginUser(values);
+		},
+	});
+
+    const loginUser = async (payload: LoginModel): Promise<void> => {
+		try {
+			const response = await authService.login(payload);
+			const data: AuthModel = response.data;
+
+			console.log('Login', data);
+			LocalStorageSession.saveAuthorization(data.security);
+            LocalStorageSession.saveIdUser(data.id);
+
+			navigate('/');
+            toastSuccess('Successful login.');
+		} catch (error) {
+			console.log('Error login', error);
+            toastError('Access denied.');
+		}
+	};
+
     return (
         <div className="container-login d-flex justify-content-center">
             <Row className="subcontainer-login d-flex justify-content-center shadow p-3 mb-5 bg-body-tertiary rounded">
@@ -42,9 +76,9 @@ const Login = () => {
                                     <Form.Control
                                         type="text"
                                         size="sm"
-                                        name="descripcion"
-                                        // value={formik.values.descripcion ?? ''}
-                                        // onChange={formik.handleChange}
+                                        name="email"
+                                        value={formik.values.email ?? ''}
+                                        onChange={formik.handleChange}
                                     />
                                 </Col>
                                 <Col sm={12}>
@@ -62,11 +96,11 @@ const Login = () => {
                                         Password
                                     </Form.Label>
                                     <Form.Control
-                                        type="text"
+                                        type="password"
                                         size="sm"
-                                        name="descripcion"
-                                        // value={formik.values.descripcion ?? ''}
-                                        // onChange={formik.handleChange}
+                                        name="password"
+                                        value={formik.values.password ?? ''}
+                                        onChange={formik.handleChange}
                                     />
                                 </Col>
                             </Stack>
@@ -80,6 +114,7 @@ const Login = () => {
                                     colorHover="colorHoverB"
                                     to="#"
                                     width="120px"
+                                    onClick={formik.handleSubmit}
                                 />
                             </Col>
                         </Row>
