@@ -7,6 +7,7 @@ import { DARK_THEME } from "./constants";
 import NewInvoice from "./pages/invoice/NewInvoice";
 import InvoiceDetail from "./pages/invoice/InvoiceDetail";
 import { PrivateOutlet } from "./components/CheckPageNavigation";
+import EditInvoice from "./pages/invoice/EditInvoice";
 
 function App() {
     const [theme, setTheme] = useState(DARK_THEME);
@@ -23,7 +24,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/invoice"
+                    path="/new-invoice"
                     element={
                         <PrivateOutlet>
                             <NewInvoice theme={theme} setTheme={setTheme} />
@@ -35,6 +36,14 @@ function App() {
                     element={
                         <PrivateOutlet>
                             <InvoiceDetail theme={theme} setTheme={setTheme} />
+                        </PrivateOutlet>
+                    }
+                />
+                <Route
+                    path="/edit-invoice/:id"
+                    element={
+                        <PrivateOutlet>
+                            <EditInvoice theme={theme} setTheme={setTheme} />
                         </PrivateOutlet>
                     }
                 />

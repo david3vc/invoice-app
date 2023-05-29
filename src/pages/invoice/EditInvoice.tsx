@@ -1,38 +1,52 @@
+import { useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
-import { LIGHT_THEME } from "../../constants";
-import Button from "../../components/Button";
 import PageLayout from "../../components/PageLayout";
+import Button from "../../components/Button";
+import { LIGHT_THEME } from "../../constants";
 import { useFormik } from "formik";
 import { InvoiceModel, ItemListModel } from "../../types";
-import useGetPaymentTerm from "../../hooks/useGetPaymentTerm";
-import useCreateInvoice from "../../hooks/useCreateInvoice";
 import { LocalStorageSession } from "../../sessions";
+import useGetPaymentTerm from "../../hooks/useGetPaymentTerm";
+import { useParams } from "react-router-dom";
+import useEditInvoice from "../../hooks/useEditInvoice";
+import useGetInvoice from "../../hooks/useGetInvoice";
 
-import "react-datepicker/dist/react-datepicker.css";
-import { useEffect } from "react";
-
-interface INewInvoice {
+interface IEditInvoice {
     theme: string;
     setTheme: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
+const EditInvoice = ({ theme, setTheme }: IEditInvoice) => {
+    const [invoiceData, setInvoiceData] = useState<InvoiceModel>({
+        idUsuario: LocalStorageSession.getIdUser(),
+        projectDescription: "",
+        invoiceDate: null,
+        status: 1,
+        paymentTerm: null,
+        invoiceStatus: null,
+        subject: null,
+        invoiceItems: [],
+        invoiceIssuer: null,
+    });
+
     const formik = useFormik<InvoiceModel>({
-        initialValues: {
-            idUsuario: LocalStorageSession.getIdUser(),
-            projectDescription: "",
-            invoiceDate: null,
-            status: 1,
-            paymentTerm: null,
-            invoiceStatus: null,
-            subject: null,
-            invoiceItems: [],
-            invoiceIssuer: null,
-        },
+        // initialValues: {
+        //     idUsuario: LocalStorageSession.getIdUser(),
+        //     projectDescription: "",
+        //     invoiceDate: null,
+        //     status: 1,
+        //     paymentTerm: null,
+        //     invoiceStatus: null,
+        //     subject: null,
+        //     invoiceItems: [],
+        //     invoiceIssuer: null,
+        // },
+        enableReinitialize: true,
+        initialValues: invoiceData,
         onSubmit: async (values) => {
             // void loginUser(values);
 
@@ -46,20 +60,36 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
             });
 
             values.invoiceItems = newInvoiceItems;
-            values.invoiceStatus = values.invoiceStatus === null ? {id: 2, name: 'Pending'} : values.invoiceStatus;
+            values.id = Number(id);
 
             console.log(values);
             // console.log(JSON.stringify(values));
-            await createInvoice(values);
+            await editInvoice(values);
         },
     });
 
+    const { id } = useParams();
+
     const { data } = useGetPaymentTerm();
-    const { mutateAsync: createInvoice } = useCreateInvoice();
+    const { data: dataInvoice } = useGetInvoice(Number(id));
+    const { mutateAsync: editInvoice } = useEditInvoice();
 
-    // useEffect(()=>{
-
-    // },[]);
+    useEffect(() => {
+        if (dataInvoice) {
+            setInvoiceData(prev => {
+                return {
+                    ...prev,
+                    invoiceDate: new Date(dataInvoice.invoiceDate ?? ''),
+                    invoiceIssuer: dataInvoice.invoiceIssuer,
+                    subject : dataInvoice.subject,
+                    paymentTerm: dataInvoice.paymentTerm,
+                    invoiceItems: dataInvoice.invoiceItems,
+                    projectDescription: dataInvoice.projectDescription,
+                    invoiceStatus: dataInvoice.invoiceStatus === null ? {id: 2, name: 'Pending'} : dataInvoice.invoiceStatus
+                }
+            })
+        }
+    }, [dataInvoice]);
 
     const addItem = () => {
         const itemList: ItemListModel = {
@@ -81,10 +111,6 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
         formik.setFieldValue("invoiceItems", itemsList);
     };
 
-    const handleChangeTotal = (index: number, total: number) => {
-        formik.setFieldValue(`invoiceItems[${index}].total`, total);
-    };
-
     return (
         <PageLayout setTheme={setTheme} theme={theme}>
             <div className="container-new-invoice d-flex flex-column align-items-center">
@@ -95,7 +121,7 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
                             colorFondo=""
                             color="colorNegro"
                             colorHover="colorHoverE"
-                            to="/"
+                            to={`/invoice/${id}`}
                             width="130px"
                         >
                             <svg
@@ -115,7 +141,7 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
                         </Button>
                     </Col>
                     <Col xs={12} sm={12} md={12} className="mt-3 mb-3">
-                        <span className="fw-bold fs-2">New Invoice</span>
+                        <span className="fw-bold fs-2">Edit Invoice</span>
                     </Col>
                     <Col xs={12} sm={12} md={12} className="mt-3 mb-3">
                         <span className="fw-bold" style={{ color: "#7c5dfa" }}>
@@ -491,7 +517,7 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
                             colorFondo=""
                             color="colorA"
                             colorHover="colorHoverE"
-                            to="/"
+                            to="#"
                             // width="130px"
                         />
                     </div>
@@ -503,7 +529,6 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
                             colorHover="colorHoverD"
                             to="#"
                             // width="130px"
-                            onClick={() => formik.setFieldValue('invoiceStatus', {id: 3, name: 'Draft'})}
                         />
                         <Button
                             nombre="Save"
@@ -521,4 +546,4 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
     );
 };
 
-export default NewInvoice;
+export default EditInvoice;

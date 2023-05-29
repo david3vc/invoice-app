@@ -29,7 +29,7 @@ interface ToastBuildProps {
 
 const config: ToastProps = {
 	timeout: 5000,
-	positionY: 'bottom',
+	positionY: 'top',
 	positionX: 'right',
 	distanceY: 20,
 	distanceX: 20,

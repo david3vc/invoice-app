@@ -1,4 +1,8 @@
-const CardInvoiceStatus = () => {
+interface ICardInvoiceStatus {
+    status: string;
+}
+
+const CardInvoiceStatus = ({status}:ICardInvoiceStatus) => {
     return (
         <div className="container-card-invoice-status">
             <span>
@@ -14,7 +18,7 @@ const CardInvoiceStatus = () => {
                     <circle cx="8" cy="8" r="8" />
                 </svg>
             </span>
-            <span className="container-card-invoice-status__term">Paid</span>
+            <span className="container-card-invoice-status__term">{status}</span>
         </div>
     );
 };

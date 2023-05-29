@@ -11,3 +11,9 @@ export const create = async (payload: InvoiceModel): Promise<FetchResponse<Invoi
 
 export const findByUser = async (payload: InvoicePeticion): Promise<AxiosResponse<InvoiceModel[]>> =>
 	await axios.post<InvoiceModel[]>(`${API_BASE_URL}/api/invoice/listarinvoicesporusuario`, payload);
+
+export const find = async (id: number): Promise<AxiosResponse<InvoiceModel>> =>
+	await axios.get<InvoiceModel>(`${API_BASE_URL}/api/invoice/${id}`);
+
+export const edit = async (payload: InvoiceModel): Promise<AxiosResponse<InvoiceModel>> =>
+	await axios.put<InvoiceModel>(`${API_BASE_URL}/api/invoice/${payload.id}`, payload);

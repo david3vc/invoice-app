@@ -25,11 +25,11 @@ const CardInvoice = ({ backgroundColor, colorText, to, data }: ICardInvoice) => 
             </Row>
             <Row className="container-card-invoice__detail col-sm-7 col-md-7 ps-1 pe-1">
                 <Col className="d-sm-flex col-sm-9 col-md-8 justify-content-sm-around">
-                    <span className={`d-flex d-sm-inline-flex ${colorText}`}>{data.invoiceDate}</span>
+                    <span className={`d-flex d-sm-inline-flex ${colorText}`}>{data.invoiceDate?.toString()}</span>
                     <span className="d-flex d-sm-inline-flex fw-bold">S/. 1800.90</span>
                 </Col>
                 <Col className="d-flex col-sm-3 col-md-4 justify-content-end align-items-center">
-                    <CardInvoiceStatus />
+                    <CardInvoiceStatus status={data.invoiceStatus?.name ?? ''} />
                 </Col>
             </Row>
         </NavLink>

@@ -4,6 +4,8 @@ import Button from "../../components/Button";
 import CardInvoiceStatus from "../home/components/CardInvoiceStatus";
 import { LIGHT_THEME } from "../../constants";
 import PageLayout from "../../components/PageLayout";
+import { useParams } from "react-router-dom";
+import useGetInvoice from "../../hooks/useGetInvoice";
 
 interface IInvoiceDetail {
     theme: string;
@@ -11,6 +13,9 @@ interface IInvoiceDetail {
 }
 
 const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
+    const { id } = useParams();
+    const { data } = useGetInvoice(Number(id ?? 0));
+
     return (
         <PageLayout setTheme={setTheme} theme={theme}>
             <div className="container-invoice-detail">
@@ -52,7 +57,7 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                     <div className="container-invoice-detail__status">
                         <span>Status</span>
                         <div className="d-flex">
-                            <CardInvoiceStatus />
+                            <CardInvoiceStatus status={data?.invoiceStatus?.name ?? ''} />
                         </div>
                     </div>
                     <div className="container-invoice-detail__buttons">
@@ -61,7 +66,7 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                             colorFondo=""
                             color="colorA"
                             colorHover="colorHoverE"
-                            to="#"
+                            to={`/edit-invoice/${id}`}
                             width=""
                         />
                         <Button
@@ -95,39 +100,43 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                             <span>#</span>
                             <span className="fw-bold">XM9141</span>
                         </p>
-                        <p>Graphic Design</p>
+                        <p>{data?.projectDescription}</p>
                     </Col>
                     <Col
                         xs={12}
                         sm={6}
                         className="d-flex flex-column align-items-sm-end"
                     >
-                        <span>19 Union Terrace</span>
-                        <span>London</span>
-                        <span>E1 3EZ</span>
-                        <span>United Kingdom</span>
+                        <span>{data?.invoiceIssuer?.streetAddress}</span>
+                        <span>{data?.invoiceIssuer?.city}</span>
+                        <span>{data?.invoiceIssuer?.postCode}</span>
+                        <span>{data?.invoiceIssuer?.country}</span>
                     </Col>
                     <Col xs={6} sm={4}>
                         <div className="d-flex flex-column">
                             <span>Invoice Date</span>
-                            <span className="fw-bold">21 Aug 2021</span>
+                            <span className="fw-bold">
+                                {data?.invoiceDate?.toString()}
+                            </span>
                         </div>
                         <div className="d-flex flex-column">
                             <span>Payment Due</span>
-                            <span className="fw-bold">20 Sep 2021</span>
+                            <span className="fw-bold">
+                                {data?.invoiceDate?.toString()}
+                            </span>
                         </div>
                     </Col>
                     <Col xs={6} sm={4} className="d-flex flex-column">
                         <span>Bill To</span>
-                        <span className="fw-bold">Alex Grim</span>
-                        <span>84 Church Way</span>
-                        <span>Bradford</span>
-                        <span>BD1 9PB</span>
-                        <span>United Kingdom</span>
+                        <span className="fw-bold">{data?.subject?.name}</span>
+                        <span>{data?.subject?.streetAddress}</span>
+                        <span>{data?.subject?.city}</span>
+                        <span>{data?.subject?.postCode}</span>
+                        <span>{data?.subject?.country}</span>
                     </Col>
                     <Col xs={12} sm={4} className="d-flex flex-column">
                         <span>Send to</span>
-                        <span className="fw-bold">alexgrim@gmail.com</span>
+                        <span className="fw-bold">{data?.subject?.email}</span>
                     </Col>
 
                     <div className="container-invoice-detail__total-movil d-sm-none">
@@ -141,7 +150,9 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                         >
                             <div className="total-movil__detail__item d-flex justify-content-between align-items-center">
                                 <div className="total-movil__detail__item__name d-flex flex-column">
-                                    <span className="fw-bold">Banner Design</span>
+                                    <span className="fw-bold">
+                                        Banner Design
+                                    </span>
                                     <span>1 x S/. 156.00</span>
                                 </div>
                                 <div className="total-movil__detail__item__amount">
@@ -150,7 +161,9 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                             </div>
                             <div className="total-movil__detail__item d-flex justify-content-between align-items-center">
                                 <div className="total-movil__detail__item__name d-flex flex-column">
-                                    <span className="fw-bold">Email Design</span>
+                                    <span className="fw-bold">
+                                        Email Design
+                                    </span>
                                     <span>2 x S/. 200.00</span>
                                 </div>
                                 <div className="total-movil__detail__item__amount">
@@ -163,7 +176,10 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                             style={
                                 theme === LIGHT_THEME
                                     ? { backgroundColor: "#141625" }
-                                    : { backgroundColor: "#1e2139", color: "white" }
+                                    : {
+                                          backgroundColor: "#1e2139",
+                                          color: "white",
+                                      }
                             }
                         >
                             <span>Grand Total</span>
@@ -190,45 +206,37 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                                 <Col sm={2}>
                                     <span>Price</span>
                                 </Col>
-                                <Col sm={3} className="d-flex justify-content-end">
+                                <Col
+                                    sm={3}
+                                    className="d-flex justify-content-end"
+                                >
                                     <span>Total</span>
                                 </Col>
                             </Row>
                             <div className="total-desktop__detail__items">
-                                <Row>
-                                    <Col sm={5}>
-                                        <span className="fw-bold">Banner Design</span>
-                                    </Col>
-                                    <Col sm={2}>
-                                        <span>1</span>
-                                    </Col>
-                                    <Col sm={2}>
-                                        <span>S/. 156.00</span>
-                                    </Col>
-                                    <Col
-                                        sm={3}
-                                        className="d-flex justify-content-end"
-                                    >
-                                        <span className="fw-bold">S/. 156.00</span>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col sm={5}>
-                                        <span className="fw-bold">Email Design</span>
-                                    </Col>
-                                    <Col sm={2}>
-                                        <span>2</span>
-                                    </Col>
-                                    <Col sm={2}>
-                                        <span>S/. 200.00</span>
-                                    </Col>
-                                    <Col
-                                        sm={3}
-                                        className="d-flex justify-content-end"
-                                    >
-                                        <span className="fw-bold">S/. 400.00</span>
-                                    </Col>
-                                </Row>
+                                {data?.invoiceItems.map((item, i) => (
+                                    <Row key={i}>
+                                        <Col sm={5}>
+                                            <span className="fw-bold">
+                                                {item.name}
+                                            </span>
+                                        </Col>
+                                        <Col sm={2}>
+                                            <span>{item.quantity}</span>
+                                        </Col>
+                                        <Col sm={2}>
+                                            <span>S/. {item.price}</span>
+                                        </Col>
+                                        <Col
+                                            sm={3}
+                                            className="d-flex justify-content-end"
+                                        >
+                                            <span className="fw-bold">
+                                                S/. {item.total}
+                                            </span>
+                                        </Col>
+                                    </Row>
+                                ))}
                             </div>
                         </div>
                         <div
@@ -236,7 +244,10 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                             style={
                                 theme === LIGHT_THEME
                                     ? { backgroundColor: "#141625" }
-                                    : { backgroundColor: "#1e2139", color: "white" }
+                                    : {
+                                          backgroundColor: "#1e2139",
+                                          color: "white",
+                                      }
                             }
                         >
                             <span>Grand Total</span>

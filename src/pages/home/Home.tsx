@@ -170,7 +170,7 @@ const Home = ({ theme, setTheme }: IHome) => {
                             colorFondo="colorFondoA"
                             color=""
                             colorHover="colorHoverB"
-                            to="/invoice"
+                            to="/new-invoice"
                             width="80px"
                         >
                             <span>
