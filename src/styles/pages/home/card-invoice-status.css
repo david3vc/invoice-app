@@ -1,11 +1,35 @@
 .container-card-invoice-status{
-    background-color: rgba(170, 249, 192, 0.2);
+    /* background-color: rgba(170, 249, 192, 0.2); */
     padding: 5px 25px;
     border-radius: 5px;
 }
 
 .container-card-invoice-status__term{
     font-weight: bold;
-    color: rgb(63, 187, 98);
+    /* color: rgb(63, 187, 98); */
     margin-left: 5px;
+}
+
+.Paid{
+    background-color: rgba(170, 249, 192, 0.2);
+}
+
+.Paid-term{
+    color: rgb(63, 187, 98);
+}
+
+.Pending{
+    background-color: rgba(255, 227, 156, 0.2);
+}
+
+.Pending-term{
+    color: rgb(255, 155, 55);
+}
+
+.Draft{
+    background-color: rgba(189, 156, 255, 0.2);
+}
+
+.Draft-term{
+    color: rgb(164, 164, 164);
 }

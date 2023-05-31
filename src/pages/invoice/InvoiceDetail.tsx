@@ -1,11 +1,15 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "../../components/Button";
 import CardInvoiceStatus from "../home/components/CardInvoiceStatus";
 import { LIGHT_THEME } from "../../constants";
 import PageLayout from "../../components/PageLayout";
-import { useParams } from "react-router-dom";
 import useGetInvoice from "../../hooks/useGetInvoice";
+import useMarkAsPaid from "../../hooks/useMarkAsPaid";
+import useDeleteInvoice from "../../hooks/useDeleteInvoice";
+import dayjs from "dayjs";
 
 interface IInvoiceDetail {
     theme: string;
@@ -13,8 +17,30 @@ interface IInvoiceDetail {
 }
 
 const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
+    const [grandTotal, setGrandTotal] = useState(0);
     const { id } = useParams();
-    const { data } = useGetInvoice(Number(id ?? 0));
+    const {
+        data,
+        refetch: refecthInvoice,
+        isSuccess: isGetInvoice,
+    } = useGetInvoice(Number(id ?? 0));
+    const { mutateAsync: markAsPaid, isSuccess: isMarkAsPaid } =
+        useMarkAsPaid();
+    const { mutateAsync: deleteInvoice } = useDeleteInvoice();
+
+    useEffect(() => {
+        if (isMarkAsPaid) refecthInvoice();
+    }, [isMarkAsPaid]);
+
+    useEffect(() => {
+        if (isGetInvoice && data?.invoiceItems?.length > 0) {
+            let total = 0;
+            for (let i = 0; i < data.invoiceItems.length; i++) {
+                total += data.invoiceItems[i].total;
+            }
+            setGrandTotal(total);
+        }
+    }, [isGetInvoice, data?.invoiceItems?.length]);
 
     return (
         <PageLayout setTheme={setTheme} theme={theme}>
@@ -55,9 +81,11 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                     }
                 >
                     <div className="container-invoice-detail__status">
-                        <span>Status</span>
+                        <span className="text-secondary">Status</span>
                         <div className="d-flex">
-                            <CardInvoiceStatus status={data?.invoiceStatus?.name ?? ''} />
+                            <CardInvoiceStatus
+                                status={data?.invoiceStatus?.name ?? ""}
+                            />
                         </div>
                     </div>
                     <div className="container-invoice-detail__buttons">
@@ -76,6 +104,7 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                             colorHover="colorHoverJ"
                             to="#"
                             width=""
+                            onClick={() => deleteInvoice(Number(id))}
                         />
                         <Button
                             nombre="Mark as Paid"
@@ -84,6 +113,7 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                             colorHover="colorHoverB"
                             to="#"
                             width="150px"
+                            onClick={async () => markAsPaid(Number(id))}
                         />
                     </div>
                 </div>
@@ -98,48 +128,60 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                     <Col xs={12} sm={6}>
                         <p>
                             <span>#</span>
-                            <span className="fw-bold">XM9141</span>
+                            <span className="fw-bold">{data?.id}</span>
                         </p>
-                        <p>{data?.projectDescription}</p>
+                        <p className="text-secondary">
+                            {data?.projectDescription}
+                        </p>
                     </Col>
                     <Col
                         xs={12}
                         sm={6}
                         className="d-flex flex-column align-items-sm-end"
                     >
-                        <span>{data?.invoiceIssuer?.streetAddress}</span>
-                        <span>{data?.invoiceIssuer?.city}</span>
-                        <span>{data?.invoiceIssuer?.postCode}</span>
-                        <span>{data?.invoiceIssuer?.country}</span>
+                        <span className="text-secondary">
+                            {data?.invoiceIssuer?.streetAddress}
+                        </span>
+                        <span className="text-secondary">
+                            {data?.invoiceIssuer?.city}
+                        </span>
+                        <span className="text-secondary">
+                            {data?.invoiceIssuer?.postCode}
+                        </span>
+                        <span className="text-secondary">
+                            {data?.invoiceIssuer?.country}
+                        </span>
                     </Col>
                     <Col xs={6} sm={4}>
-                        <div className="d-flex flex-column">
-                            <span>Invoice Date</span>
+                        <div className="d-flex flex-column mt-4">
+                            <span className="text-secondary">Invoice Date</span>
                             <span className="fw-bold">
-                                {data?.invoiceDate?.toString()}
-                            </span>
-                        </div>
-                        <div className="d-flex flex-column">
-                            <span>Payment Due</span>
-                            <span className="fw-bold">
-                                {data?.invoiceDate?.toString()}
+                                {dayjs(data?.invoiceDate).format("DD-MM-YYYY")}
                             </span>
                         </div>
                     </Col>
-                    <Col xs={6} sm={4} className="d-flex flex-column">
-                        <span>Bill To</span>
+                    <Col xs={6} sm={4} className="d-flex flex-column mt-4">
+                        <span className="text-secondary">Bill To</span>
                         <span className="fw-bold">{data?.subject?.name}</span>
-                        <span>{data?.subject?.streetAddress}</span>
-                        <span>{data?.subject?.city}</span>
-                        <span>{data?.subject?.postCode}</span>
-                        <span>{data?.subject?.country}</span>
+                        <span className="text-secondary">
+                            {data?.subject?.streetAddress}
+                        </span>
+                        <span className="text-secondary">
+                            {data?.subject?.city}
+                        </span>
+                        <span className="text-secondary">
+                            {data?.subject?.postCode}
+                        </span>
+                        <span className="text-secondary">
+                            {data?.subject?.country}
+                        </span>
                     </Col>
-                    <Col xs={12} sm={4} className="d-flex flex-column">
-                        <span>Send to</span>
+                    <Col xs={12} sm={4} className="d-flex flex-column mt-4">
+                        <span className="text-secondary">Send to</span>
                         <span className="fw-bold">{data?.subject?.email}</span>
                     </Col>
 
-                    <div className="container-invoice-detail__total-movil d-sm-none">
+                    <div className="container-invoice-detail__total-movil d-sm-none mt-5">
                         <div
                             className="container-invoice-detail__total-movil__detail"
                             style={
@@ -148,31 +190,27 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                                     : { backgroundColor: "#f8f8fb" }
                             }
                         >
-                            <div className="total-movil__detail__item d-flex justify-content-between align-items-center">
-                                <div className="total-movil__detail__item__name d-flex flex-column">
-                                    <span className="fw-bold">
-                                        Banner Design
-                                    </span>
-                                    <span>1 x S/. 156.00</span>
+                            {data?.invoiceItems.map((item, i) => (
+                                <div className="total-movil__detail__item d-flex justify-content-between align-items-center">
+                                    <div className="total-movil__detail__item__name d-flex flex-column">
+                                        <span className="fw-bold">
+                                            {item.name}
+                                        </span>
+                                        <span className="text-secondary fw-bold">
+                                            {item.quantity} x S/.{" "}
+                                            {item.price.toFixed(2)}
+                                        </span>
+                                    </div>
+                                    <div className="total-movil__detail__item__amount">
+                                        <span className="fw-bold">
+                                            S/. {item.total.toFixed(2)}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="total-movil__detail__item__amount">
-                                    <span>S/. 156.00</span>
-                                </div>
-                            </div>
-                            <div className="total-movil__detail__item d-flex justify-content-between align-items-center">
-                                <div className="total-movil__detail__item__name d-flex flex-column">
-                                    <span className="fw-bold">
-                                        Email Design
-                                    </span>
-                                    <span>2 x S/. 200.00</span>
-                                </div>
-                                <div className="total-movil__detail__item__amount">
-                                    <span>S/. 400.00</span>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                         <div
-                            className="container-invoice-detail__total-movil__grand-total d-flex justify-content-between"
+                            className="container-invoice-detail__total-movil__grand-total d-flex justify-content-between align-items-center"
                             style={
                                 theme === LIGHT_THEME
                                     ? { backgroundColor: "#141625" }
@@ -182,12 +220,12 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                                       }
                             }
                         >
-                            <span>Grand Total</span>
-                            <span>S/. 556.00</span>
+                            <span className="fw-bold">Grand Total</span>
+                            <span className="fw-bold fs-5">S/. {grandTotal.toFixed(2)}</span>
                         </div>
                     </div>
 
-                    <div className="container-invoice-detail__total-desktop">
+                    <div className="container-invoice-detail__total-desktop mt-5">
                         <div
                             className="container-invoice-detail__total-desktop__detail"
                             style={
@@ -196,21 +234,27 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                                     : { backgroundColor: "#f8f8fb" }
                             }
                         >
-                            <Row>
+                            <Row className="mb-4">
                                 <Col sm={5}>
-                                    <span>Item Name</span>
+                                    <span className="text-secondary">
+                                        Item Name
+                                    </span>
                                 </Col>
                                 <Col sm={2}>
-                                    <span>Qty</span>
+                                    <span className="text-secondary">Qty</span>
                                 </Col>
                                 <Col sm={2}>
-                                    <span>Price</span>
+                                    <span className="text-secondary">
+                                        Price
+                                    </span>
                                 </Col>
                                 <Col
                                     sm={3}
                                     className="d-flex justify-content-end"
                                 >
-                                    <span>Total</span>
+                                    <span className="text-secondary">
+                                        Total
+                                    </span>
                                 </Col>
                             </Row>
                             <div className="total-desktop__detail__items">
@@ -222,17 +266,21 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                                             </span>
                                         </Col>
                                         <Col sm={2}>
-                                            <span>{item.quantity}</span>
+                                            <span className="text-secondary fw-bold">
+                                                {item.quantity}
+                                            </span>
                                         </Col>
                                         <Col sm={2}>
-                                            <span>S/. {item.price}</span>
+                                            <span className="text-secondary fw-bold">
+                                                S/. {item.price.toFixed(2)}
+                                            </span>
                                         </Col>
                                         <Col
                                             sm={3}
                                             className="d-flex justify-content-end"
                                         >
                                             <span className="fw-bold">
-                                                S/. {item.total}
+                                                S/. {item.total.toFixed(2)}
                                             </span>
                                         </Col>
                                     </Row>
@@ -251,7 +299,9 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                             }
                         >
                             <span>Grand Total</span>
-                            <span className="fw-bold fs-3">S/. 556.00</span>
+                            <span className="fw-bold fs-3">
+                                S/. {grandTotal.toFixed(2)}
+                            </span>
                         </div>
                     </div>
                 </Row>
@@ -264,28 +314,30 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                     }
                 >
                     <Button
-                        nombre="Discard"
+                        nombre="Edit"
                         colorFondo=""
                         color="colorA"
                         colorHover="colorHoverE"
-                        to="#"
                         // width="130px"
+                        to={`/edit-invoice/${id}`}
                     />
                     <Button
-                        nombre="Draft"
-                        colorFondo="colorFondoC"
-                        color="colorF"
-                        colorHover="colorHoverD"
+                        nombre="Delete"
+                        colorFondo="colorFondoI"
+                        color=""
+                        colorHover="colorHoverJ"
                         to="#"
                         // width="130px"
+                        onClick={() => deleteInvoice(Number(id))}
                     />
                     <Button
-                        nombre="Save"
+                        nombre="Paid"
                         colorFondo="colorFondoA"
                         color=""
                         colorHover="colorHoverB"
                         to="#"
                         // width="130px"
+                        onClick={async () => markAsPaid(Number(id))}
                     />
                 </div>
             </div>

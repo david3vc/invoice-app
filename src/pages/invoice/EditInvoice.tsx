@@ -14,6 +14,7 @@ import useGetPaymentTerm from "../../hooks/useGetPaymentTerm";
 import { useParams } from "react-router-dom";
 import useEditInvoice from "../../hooks/useEditInvoice";
 import useGetInvoice from "../../hooks/useGetInvoice";
+import useMarkAsPaid from "../../hooks/useMarkAsPaid";
 
 interface IEditInvoice {
     theme: string;
@@ -73,13 +74,14 @@ const EditInvoice = ({ theme, setTheme }: IEditInvoice) => {
     const { data } = useGetPaymentTerm();
     const { data: dataInvoice } = useGetInvoice(Number(id));
     const { mutateAsync: editInvoice } = useEditInvoice();
+    
 
     useEffect(() => {
         if (dataInvoice) {
             setInvoiceData(prev => {
                 return {
                     ...prev,
-                    invoiceDate: new Date(dataInvoice.invoiceDate ?? ''),
+                    invoiceDate: dataInvoice.invoiceDate !== null ? new Date(dataInvoice.invoiceDate ?? '') : null,
                     invoiceIssuer: dataInvoice.invoiceIssuer,
                     subject : dataInvoice.subject,
                     paymentTerm: dataInvoice.paymentTerm,

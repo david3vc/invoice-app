@@ -2,6 +2,7 @@ import { SecurityModel } from "../types";
 
 const STORAGE_OF_AUTHORIZATION = 'STORAGE_OF_AUTHORIZATION';
 const ID_USER = 'id_user';
+const USERNAME = 'username';
 
 export const saveAuthorization = (data: SecurityModel): void => {
 	localStorage.setItem(STORAGE_OF_AUTHORIZATION, JSON.stringify(data));
@@ -11,8 +12,20 @@ export const saveIdUser = (id: number): void => {
 	localStorage.setItem(ID_USER, JSON.stringify(id));
 };
 
+export const saveUsername = (username: string): void => {
+	localStorage.setItem(USERNAME, JSON.stringify(username));
+};
+
 export const getIdUser = (): number => {
 	const data = localStorage.getItem(ID_USER);
+
+	if (data == null) throw new Error('Login required');
+
+	return JSON.parse(data);
+};
+
+export const getUsername = (): number => {
+	const data = localStorage.getItem(USERNAME);
 
 	if (data == null) throw new Error('Login required');
 
@@ -29,6 +42,8 @@ export const getAuthorization = (): SecurityModel => {
 
 export const removeAuthorization = (): void => {
 	localStorage.removeItem(STORAGE_OF_AUTHORIZATION);
+	localStorage.removeItem(ID_USER);
+	localStorage.removeItem(USERNAME);
 };
 
 export const existsAuthorization = (): boolean => {

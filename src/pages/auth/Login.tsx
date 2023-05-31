@@ -31,6 +31,7 @@ const Login = () => {
 			console.log('Login', data);
 			LocalStorageSession.saveAuthorization(data.security);
             LocalStorageSession.saveIdUser(data.id);
+            LocalStorageSession.saveUsername(data.email);
 
 			navigate('/');
             toastSuccess('Successful login.');

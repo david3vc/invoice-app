@@ -14,6 +14,8 @@ import PageLayout from "../../components/PageLayout";
 import useGetInvoicesByUser from "../../hooks/useGetInvoicesByUser";
 import { LocalStorageSession } from "../../sessions";
 import { InvoicePeticion } from "../../types";
+import { useFormik } from "formik";
+import Empty from "./components/Empty";
 
 const Main = styled("div")`
     font-family: sans-serif;
@@ -56,9 +58,9 @@ const ListItem = styled("li")`
 `;
 
 const options = [
-    { typography: "Draft", codigo: 1 },
-    { typography: "Pending", codigo: 2 },
-    { typography: "Paid", codigo: 3 },
+    { typography: "Draft", codigo: 3, isChecked: false },
+    { typography: "Pending", codigo: 2, isChecked: false },
+    { typography: "Paid", codigo: 1, isChecked: false },
 ];
 
 interface IHome {
@@ -71,8 +73,21 @@ const Home = ({ theme, setTheme }: IHome) => {
     const [selectedOption, setSelectedOption] = useState("");
     const [themeBoxShadow, setThemeBoxShadow] = useState(BOX_SHADOW_DARK_THEME);
     const idUser = LocalStorageSession.getIdUser();
-    
-    const { mutateAsync: getInvoicesByUser, data: invoicesByUser } = useGetInvoicesByUser();
+
+    const formik = useFormik({
+        // initialValues: {
+        //     draft: false,
+        //     pending: false,
+        //     paid: false
+        // },
+        initialValues: {
+            opciones: options,
+        },
+        onSubmit: (values) => console.log(values),
+    });
+
+    const { mutateAsync: getInvoicesByUser, data: invoicesByUser } =
+        useGetInvoicesByUser();
 
     const toggling = () => setIsOpen(!isOpen);
 
@@ -85,13 +100,22 @@ const Home = ({ theme, setTheme }: IHome) => {
         else setThemeBoxShadow(BOX_SHADOW_LIGHT_THEME);
     }, [theme]);
 
-    useEffect(()=>{
+    useEffect(() => {
         const payload: InvoicePeticion = {
             idUsuario: idUser,
-            status: 1
-        }
+            status: 1,
+        };
         getInvoicesByUser(payload);
-    },[]);
+    }, []);
+
+    const filtrarPorStatus = (status: number, isChecked: boolean) => {
+        console.log(status, isChecked);
+        const payload: InvoicePeticion = {
+            idUsuario: idUser,
+            status,
+        };
+        if (!isChecked) getInvoicesByUser(payload);
+    };
 
     return (
         <PageLayout setTheme={setTheme} theme={theme}>
@@ -149,7 +173,7 @@ const Home = ({ theme, setTheme }: IHome) => {
                                     <DropDownList
                                         className={`${theme} ${themeBoxShadow} lista-opciones`}
                                     >
-                                        {options.map((option) => (
+                                        {options.map((option, i) => (
                                             <ListItem
                                                 onClick={onOptionClicked}
                                                 key={Math.random()}
@@ -158,6 +182,20 @@ const Home = ({ theme, setTheme }: IHome) => {
                                                     type="checkbox"
                                                     id={`default-checkbox`}
                                                     label={`${option.typography}`}
+                                                    key={option.codigo}
+                                                    name={option.typography}
+                                                    // checked={option.isChecked ?? false}
+                                                    onChange={(e) => {
+                                                        console.log(e.target);
+                                                        options[i].isChecked =
+                                                            e.target.checked;
+                                                    }}
+                                                    onClick={() =>
+                                                        filtrarPorStatus(
+                                                            option.codigo,
+                                                            option.isChecked
+                                                        )
+                                                    }
                                                 />
                                             </ListItem>
                                         ))}
@@ -189,8 +227,8 @@ const Home = ({ theme, setTheme }: IHome) => {
                     </Col>
                 </Row>
                 <Row className="container-home__invoices mt-4">
-                    {
-                        (invoicesByUser?.length ?? 0) > 0 && invoicesByUser?.map((invoice, i) => (
+                    {(invoicesByUser?.length ?? 0) > 0 ? (
+                        invoicesByUser?.map((invoice, i) => (
                             <CardInvoice
                                 data={invoice}
                                 to={`invoice/${invoice.id}`}
@@ -200,11 +238,17 @@ const Home = ({ theme, setTheme }: IHome) => {
                                         : "background-color-dark"
                                 }
                                 colorText={
-                                    theme !== LIGHT_THEME ? "text-secondary" : ""
+                                    theme !== LIGHT_THEME
+                                        ? "text-secondary"
+                                        : ""
                                 }
+                                theme={theme}
+                                key={i}
                             />
                         ))
-                    }
+                    ) : (
+                        <Empty />
+                    )}
                 </Row>
             </div>
         </PageLayout>

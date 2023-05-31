@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { DARK_THEME, LIGHT_THEME } from "../constants";
 import Button from "./Button";
 import { LocalStorageSession } from "../sessions";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 interface IHeader {
     setTheme: React.Dispatch<React.SetStateAction<string>>;
@@ -16,7 +16,6 @@ interface IHeader {
 }
 
 const Header = ({ setTheme, theme }: IHeader) => {
-    const navigate = useNavigate();
     const [userButton, setUserButton] = useState(false);
     const toggleTheme = () => {
         if (theme === LIGHT_THEME) setTheme(DARK_THEME);
@@ -35,15 +34,16 @@ const Header = ({ setTheme, theme }: IHeader) => {
         <div className="container-header">
             <Row className="d-flex">
                 <Col>
-                    <div className="container-header__logo d-flex">
+                    <NavLink className="container-header__logo d-flex" to={"/"}>
                         <img src={logo} alt="" />
-                    </div>
+                    </NavLink>
                 </Col>
                 <Col className="d-flex justify-content-end align-items-center">
                     <Stack direction="horizontal" gap={3}>
                         <div
                             className="container-header__theme"
                             onClick={toggleTheme}
+                            style={{cursor: 'pointer'}}
                         >
                             <img
                                 src={theme === DARK_THEME ? iconLuna : iconSun}
@@ -53,8 +53,9 @@ const Header = ({ setTheme, theme }: IHeader) => {
                         <div
                             className="container-header__user"
                             onClick={() => setUserButton(!userButton)}
+                            style={{cursor: 'pointer'}}
                         >
-                            <span>J</span>
+                            <span>{LocalStorageSession.getUsername().toString().substring(0,1).toUpperCase()}</span>
                             {userButton && (
                                 <div className="container-header__user__logout">
                                     <Button
