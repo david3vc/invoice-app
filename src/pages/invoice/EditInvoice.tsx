@@ -14,7 +14,6 @@ import useGetPaymentTerm from "../../hooks/useGetPaymentTerm";
 import { useParams } from "react-router-dom";
 import useEditInvoice from "../../hooks/useEditInvoice";
 import useGetInvoice from "../../hooks/useGetInvoice";
-import useMarkAsPaid from "../../hooks/useMarkAsPaid";
 
 interface IEditInvoice {
     theme: string;

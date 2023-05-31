@@ -14,13 +14,7 @@ import PageLayout from "../../components/PageLayout";
 import useGetInvoicesByUser from "../../hooks/useGetInvoicesByUser";
 import { LocalStorageSession } from "../../sessions";
 import { InvoicePeticion } from "../../types";
-import { useFormik } from "formik";
 import Empty from "./components/Empty";
-
-const Main = styled("div")`
-    font-family: sans-serif;
-    height: 100vh;
-`;
 
 const DropDownContainer = styled("div")`
     width: 5.5em;
@@ -70,21 +64,8 @@ interface IHome {
 
 const Home = ({ theme, setTheme }: IHome) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState("");
     const [themeBoxShadow, setThemeBoxShadow] = useState(BOX_SHADOW_DARK_THEME);
     const idUser = LocalStorageSession.getIdUser();
-
-    const formik = useFormik({
-        // initialValues: {
-        //     draft: false,
-        //     pending: false,
-        //     paid: false
-        // },
-        initialValues: {
-            opciones: options,
-        },
-        onSubmit: (values) => console.log(values),
-    });
 
     const { mutateAsync: getInvoicesByUser, data: invoicesByUser } =
         useGetInvoicesByUser();
@@ -140,7 +121,7 @@ const Home = ({ theme, setTheme }: IHome) => {
                                     className=""
                                     style={{ marginRight: "5px" }}
                                 >
-                                    {selectedOption || "Filter"}
+                                    {"Filter"}
                                 </span>
                                 {isOpen ? (
                                     <svg

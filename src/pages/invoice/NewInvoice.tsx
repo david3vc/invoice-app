@@ -13,7 +13,6 @@ import useCreateInvoice from "../../hooks/useCreateInvoice";
 import { LocalStorageSession } from "../../sessions";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { useEffect } from "react";
 
 interface INewInvoice {
     theme: string;
@@ -81,9 +80,9 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
         formik.setFieldValue("invoiceItems", itemsList);
     };
 
-    const handleChangeTotal = (index: number, total: number) => {
-        formik.setFieldValue(`invoiceItems[${index}].total`, total);
-    };
+    // const handleChangeTotal = (index: number, total: number) => {
+    //     formik.setFieldValue(`invoiceItems[${index}].total`, total);
+    // };
 
     return (
         <PageLayout setTheme={setTheme} theme={theme}>

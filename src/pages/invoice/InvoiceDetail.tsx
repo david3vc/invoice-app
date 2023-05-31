@@ -190,7 +190,7 @@ const InvoiceDetail = ({ theme, setTheme }: IInvoiceDetail) => {
                                     : { backgroundColor: "#f8f8fb" }
                             }
                         >
-                            {data?.invoiceItems.map((item, i) => (
+                            {data?.invoiceItems.map((item) => (
                                 <div className="total-movil__detail__item d-flex justify-content-between align-items-center">
                                     <div className="total-movil__detail__item__name d-flex flex-column">
                                         <span className="fw-bold">

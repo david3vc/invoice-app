@@ -6,7 +6,7 @@ import Button from "../../components/Button";
 import imagenInvoice from "../../assets/undraw_printing_invoices_-5-r4r.svg";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import { SingupCreateModel, SingupResponseModel } from "../../types";
+import { SingupCreateModel } from "../../types";
 import { authService } from "../../services";
 
 const Singup = () => {

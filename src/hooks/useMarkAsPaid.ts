@@ -1,4 +1,4 @@
-import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { InvoiceModel } from '../types';
 import { FetchError, isFetchError } from '../utils/AxiosHelper';
 import { InvoiceService } from '../services';
@@ -10,16 +10,12 @@ const useMarkAsPaid = (): UseMutationResult<InvoiceModel, FetchError<InvoiceMode
 		mutationFn: async (id: number) =>
 			await InvoiceService.markAsPaid(id).then(res => res.data),
 		onError: error => {
-			// console.log(error);
 			if (isFetchError(error)) {
-				// console.log(error.response?.data);
 				toastWarning(error.response?.data?.message ?? APP_WARNING_MESSAGE);
 			} else toastError(APP_ERROR_MESSAGE);
 		},
 		onSuccess: () => {
 			toastSuccess(APP_SUCCESS_MESSAGE);
-			// void queryClient.invalidateQueries({ queryKey: [PAGINATED_SEARCH] });
-			// void queryClient.invalidateQueries({ queryKey: [FIND_BY_ID] });
 		},
 	});
 };
