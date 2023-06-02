@@ -13,6 +13,7 @@ import useCreateInvoice from "../../hooks/useCreateInvoice";
 import { LocalStorageSession } from "../../sessions";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
 
 interface INewInvoice {
     theme: string;
@@ -20,6 +21,7 @@ interface INewInvoice {
 }
 
 const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
+    const navigate = useNavigate();
     const formik = useFormik<InvoiceModel>({
         initialValues: {
             idUsuario: LocalStorageSession.getIdUser(),
@@ -45,11 +47,15 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
             });
 
             values.invoiceItems = newInvoiceItems;
-            values.invoiceStatus = values.invoiceStatus === null ? {id: 2, name: 'Pending'} : values.invoiceStatus;
+            values.invoiceStatus =
+                values.invoiceStatus === null
+                    ? { id: 2, name: "Pending" }
+                    : values.invoiceStatus;
 
             console.log(values);
             // console.log(JSON.stringify(values));
             await createInvoice(values);
+            navigate("/");
         },
     });
 
@@ -83,6 +89,14 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
     // const handleChangeTotal = (index: number, total: number) => {
     //     formik.setFieldValue(`invoiceItems[${index}].total`, total);
     // };
+
+    const markAsDraft = () => {
+        formik.setFieldValue("invoiceStatus", {
+            id: 3,
+            name: "Draft",
+        });
+        formik.handleSubmit();
+    }
 
     return (
         <PageLayout setTheme={setTheme} theme={theme}>
@@ -502,7 +516,7 @@ const NewInvoice = ({ theme, setTheme }: INewInvoice) => {
                             colorHover="colorHoverD"
                             to="#"
                             // width="130px"
-                            onClick={() => formik.setFieldValue('invoiceStatus', {id: 3, name: 'Draft'})}
+                            onClick={markAsDraft}
                         />
                         <Button
                             nombre="Save"

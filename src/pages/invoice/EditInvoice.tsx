@@ -14,6 +14,7 @@ import useGetPaymentTerm from "../../hooks/useGetPaymentTerm";
 import { useParams } from "react-router-dom";
 import useEditInvoice from "../../hooks/useEditInvoice";
 import useGetInvoice from "../../hooks/useGetInvoice";
+import useDeleteInvoiceItem from "../../hooks/useDeleteInvoiceItem";
 
 interface IEditInvoice {
     theme: string;
@@ -61,6 +62,7 @@ const EditInvoice = ({ theme, setTheme }: IEditInvoice) => {
 
             values.invoiceItems = newInvoiceItems;
             values.id = Number(id);
+            values.invoiceStatus = values.invoiceStatus?.name === 'Draft' ? {id: 2, name: 'Pending'} : values.invoiceStatus;
 
             console.log(values);
             // console.log(JSON.stringify(values));
@@ -71,8 +73,9 @@ const EditInvoice = ({ theme, setTheme }: IEditInvoice) => {
     const { id } = useParams();
 
     const { data } = useGetPaymentTerm();
-    const { data: dataInvoice } = useGetInvoice(Number(id));
+    const { data: dataInvoice, refetch: refetchInvoice } = useGetInvoice(Number(id));
     const { mutateAsync: editInvoice } = useEditInvoice();
+    const { mutateAsync: deleteInvoiceItem, isSuccess: isDeleteInvoiceItem } = useDeleteInvoiceItem();
     
 
     useEffect(() => {
@@ -92,6 +95,10 @@ const EditInvoice = ({ theme, setTheme }: IEditInvoice) => {
         }
     }, [dataInvoice]);
 
+    useEffect(()=>{
+        if(isDeleteInvoiceItem) refetchInvoice();
+    },[isDeleteInvoiceItem])
+
     const addItem = () => {
         const itemList: ItemListModel = {
             name: "",
@@ -105,11 +112,18 @@ const EditInvoice = ({ theme, setTheme }: IEditInvoice) => {
         formik.setFieldValue("invoiceItems", itemsList);
     };
 
-    const removeItem = async (index: number) => {
+    const removeItem = async (index: number, item: ItemListModel) => {
+        console.log(item)
         const itemsList = formik.values.invoiceItems ?? [];
-        itemsList.splice(index, 1);
 
-        formik.setFieldValue("invoiceItems", itemsList);
+        if((item.id ?? 0) > 0){
+            console.log('hook')
+            await deleteInvoiceItem(item.id ?? 0);
+        }else{
+            itemsList.splice(index, 1);
+            formik.setFieldValue("invoiceItems", itemsList);
+        }
+
     };
 
     return (
@@ -474,7 +488,7 @@ const EditInvoice = ({ theme, setTheme }: IEditInvoice) => {
                                             fill="currentColor"
                                             className="bi bi-trash removeItem"
                                             viewBox="0 0 16 16"
-                                            onClick={() => removeItem(i)}
+                                            onClick={() => removeItem(i, item)}
                                         >
                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
                                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />

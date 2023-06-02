@@ -1,16 +1,14 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { InvoiceModel } from '../types';
+import { ItemListModel } from '../types';
 import { FetchError, isFetchError } from '../utils/AxiosHelper';
-import { InvoiceService } from '../services';
+import { InvoiceItemService } from '../services';
 import { toastError, toastSuccess, toastWarning } from '../utils/ToastHelper';
 import { APP_ERROR_MESSAGE, APP_SUCCESS_MESSAGE, APP_WARNING_MESSAGE } from '../constants';
-import { useNavigate } from 'react-router-dom';
 
-const useDeleteInvoice = (): UseMutationResult<InvoiceModel, FetchError<InvoiceModel>, number> => {
-	const navigate = useNavigate();
+const useDeleteInvoiceItem = (): UseMutationResult<ItemListModel, FetchError<ItemListModel>, number> => {
 	return useMutation({
 		mutationFn: async (id: number) =>
-			await InvoiceService.eliminar(id).then(res => res.data),
+			await InvoiceItemService.eliminar(id).then(res => res.data),
 		onError: error => {
 			if (isFetchError(error)) {
 				toastWarning(error.response?.data?.message ?? APP_WARNING_MESSAGE);
@@ -18,9 +16,8 @@ const useDeleteInvoice = (): UseMutationResult<InvoiceModel, FetchError<InvoiceM
 		},
 		onSuccess: () => {
 			toastSuccess(APP_SUCCESS_MESSAGE);
-			navigate("/");
 		},
 	});
 };
 
-export default useDeleteInvoice;
+export default useDeleteInvoiceItem;
