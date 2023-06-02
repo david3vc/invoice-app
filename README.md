@@ -49,7 +49,7 @@ The process to deploy the project locally is:
  4. Login with the following credentials:
  - **email**: **demo@demo.com**
  - **password**: **123**
- 5. You can also create an account by clicking the signup button.
+ 5. You can also create an account by clicking the **Signup button**.
 
 ### Built with
 
