@@ -51,7 +51,7 @@ const Singup = () => {
                     <Stack gap={5}>
                         <Row>
                             <Col className="d-flex justify-content-center">
-                                <span className="fs-2 fw-bold" style={{color: '#7c5dfa'}}>SINGUP</span>
+                                <span className="fs-2 fw-bold" style={{color: '#7c5dfa'}}>SIGNUP</span>
                             </Col>
                         </Row>
                         <Row className="">
