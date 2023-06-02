@@ -124,7 +124,7 @@ const Login = () => {
                                 <Stack direction="horizontal" gap={3}>
                                     <span>Don't have an account?</span>
                                     <Button
-                                        nombre="Singup"
+                                        nombre="Signup"
                                         colorFondo="colorFondoK"
                                         color="colorA"
                                         colorHover="colorHoverE"
