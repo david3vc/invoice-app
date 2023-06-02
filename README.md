@@ -45,10 +45,11 @@ The process to deploy the project locally is:
  1. Download npm dependencies with **npm i**
  2. Run the project with the npm **run dev command**
  3. Add an **.env** file in the root of the project:
-- **VITE_API_BASE_URL**: is the url of our api developed in .net core
+ - **VITE_API_BASE_URL**: is the url of our api developed in .net core
  4. Login with the following credentials:
-- **email**: **demo@demo.com**
-- **password**: **123**
+ - **email**: **demo@demo.com**
+ - **password**: **123**
+ 5. You can also create an account by clicking the signup button.
 
 ### Built with
 
